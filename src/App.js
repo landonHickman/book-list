@@ -20,11 +20,14 @@ function App() {
   }
 
   const renderBooks = () => {
-    return books.map (book => {
+    return books.map ((book, index) => {
       return(
-        <div>
+        <div key={index + 1}>
+          <h2>ID: {index + 1}</h2>
           <h2>Title: {book.title}</h2>
           <h2>Author: {book.author}.</h2>
+          <p>Delete</p>
+          <p>Update</p>
           <br/>
         </div>
       )
@@ -33,6 +36,7 @@ function App() {
   return (
     <div className="App">
       <h1>Hello</h1>
+      
       {renderBooks()}
     </div>
   );

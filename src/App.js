@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import BookForm from './BookForm'
+import Book from './Book'
 
 function App() {
   const [books, setBooks] = useState([])
@@ -23,21 +24,36 @@ function App() {
 
   const deleteBook = (id) => {
     console.log('deleteBook clicked id:', id)
-    let newBooks = books.filter((book, index) => {
-      return id !== (index) //this works but it resets the Id so their will always be a number 1 until all of them are deleted.
+    let newBooks = books.filter((book) => {
+      return id !== (book.isbn)
     })
     setBooks(newBooks)
   }
+  const editBook = (editedBook) => {
+    let updatedBooks = books.map((book)=> {
+      return book.isbn === editedBook.id ? editedBook : book
+    })
+    setBooks(updatedBooks)
+  }
+
 
   const renderBooks = () => {
-    return books.map ((book, index) => {
-      return(
-        <div key={index}>
-          <h2>ID: {index + 1}</h2>
-          <h2>Title: {book.title}</h2>
+    if (books.length == 0){
+      return <h1>No Books</h1>
+    }
+
+    let id = 0
+    return books.map ((book) => {
+      return (
+        
+        <div key={book.isbn}>
+          <h2>Id: {book.isbn}</h2>
+
+          {/* <h2>Title: {book.title}</h2>
           <h2>Author: {book.author}.</h2>
           <p onClick={() => deleteBook(index)}>Delete</p>
-          <p>Update</p>
+          <p>Update</p> */}
+          <Book deleteBook={deleteBook} editBook={editBook} book={book}/>
           <br/>
         </div>
       )
@@ -52,7 +68,7 @@ function App() {
   return (
     <div className="App">
       <button onClick={() => setShowForm(!showForm)}>{showForm ? 'Hide Form' : 'Show Form'}</button>
-      {showForm && <BookForm addBook={addBook}/>}
+      {showForm && <BookForm addBook={addBook} setShowForm={setShowForm}/>}
       {renderBooks()}
     </div>
   );
